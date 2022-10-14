@@ -16,7 +16,8 @@ static void Add_Button(Button_t* btn);
 void Button_Create(Button_t *btn,
                    uint8_t(*read_btn_level)(uint32_t),
                    uint32_t Pin,
-                   uint8_t btn_trigger_level)
+                   uint8_t btn_trigger_level,
+                   uint8_t BUTTON_LONG_CYCLE_FLAG)
 {
   memset(btn, 0, sizeof(struct button));  //清除结构体信息，建议用户在之前清除
   btn->Pin = Pin;
@@ -27,6 +28,7 @@ void Button_Create(Button_t *btn,
 //  btn->Button_Last_Level = btn->Read_Button_Level(btn->Pin); //按键当前电平
   btn->Button_Last_Level = 1; //按键当前电平
   btn->Debounce_Time = 0;
+  btn->Button_Cycle_Enable = BUTTON_LONG_CYCLE_FLAG;
   Add_Button(btn);
 }
 
@@ -88,12 +90,21 @@ void Button_Cycle_Process(Button_t *btn)
 
         if(++(btn->Long_Time) >= BUTTON_LONG_TIME)  //释放按键前更新触发事件为长按
         {
-
-          if(++(btn->Button_Cycle) >= BUTTON_LONG_CYCLE)    //连续触发长按的周期
+          if(btn->Button_Cycle_Enable == BUTTON_LONG_CYCLE_ENABLE)
           {
-            btn->Button_Cycle = 0;
-            btn->Button_Trigger_Event = BUTTON_LONG;
-            TRIGGER_CB(BUTTON_LONG);    //长按
+              if(++(btn->Button_Cycle) >= BUTTON_LONG_CYCLE)    //连续触发长按的周期
+              {
+                btn->Button_Cycle = 0;
+                btn->Button_Trigger_Event = BUTTON_LONG;
+                TRIGGER_CB(BUTTON_LONG);    //长按
+              }
+          }else if( btn->Button_Trigger_Last_Event == BUTTON_DOWM){
+            if(++(btn->Button_Cycle) >= BUTTON_LONG_CYCLE)    //连续触发长按的周期
+            {
+              btn->Button_Cycle = 0;
+              btn->Button_Trigger_Event = BUTTON_LONG;
+              TRIGGER_CB(BUTTON_LONG);    //长按
+            }
           }
 
           if(btn->Long_Time == 0xFF)  //更新时间溢出

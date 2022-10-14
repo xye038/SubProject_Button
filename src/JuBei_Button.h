@@ -12,6 +12,8 @@
 #define BUTTON_DEBOUNCE_TIME    2   //消抖时间      (n-1)*调用周期
 #define BUTTON_LONG_TIME        15  /* 持续n秒((n-1)*调用周期 ms)，认为长按事件 */
 #define BUTTON_LONG_CYCLE       5   //长按触发周期时间  (n-1)*调用周期
+#define BUTTON_LONG_CYCLE_ENABLE 0   //连续长按触发允许
+#define BUTTON_LONG_CYCLE_DISABLE 1  //连续长按触发禁止
 
 
 
@@ -27,6 +29,7 @@ typedef enum {
   BUTTON_UP,
   BUTTON_LONG,
   BUTTON_LONG_FREE,
+  BUTTON_ALL_RIGGER,
   number_of_event, /* 触发回调的事件 */
   NONE_TRIGGER
 }Button_Event;
@@ -51,6 +54,7 @@ typedef struct button
   Button_CallBack CallBack_Function[number_of_event];
 
   uint8_t Button_Cycle;            /* 连续按键周期 */
+  uint8_t Button_Cycle_Enable;    /*连续按键是否触发*/
 
   uint8_t Timer_Count;      /* 计时 */
   uint8_t Debounce_Time;    /* 消抖时间 */
@@ -66,7 +70,8 @@ typedef struct button
 void Button_Create(Button_t *btn,
                    uint8_t(*read_btn_level)(uint32_t),
                    uint32_t Pin,
-                   uint8_t btn_trigger_level);
+                   uint8_t btn_trigger_level,
+                   uint8_t BUTTON_LONG_CYCLE_FLAG);
 void Button_Attach(Button_t *btn,Button_Event btn_event,Button_CallBack btn_callback);
 void Button_Delete(Button_t *btn);
 void Button_Process(void);

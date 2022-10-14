@@ -30,10 +30,10 @@ void Button_Two_Long_CallBack(void *btn)
  
  void Button_Init(void)
  {
- 	Button_Create(&Button_1, Read_Key_Level, Button_Pin_1, BUTTON_ON);
+ 	Button_Create(&Button_1, Read_Key_Level, Button_Pin_1, BUTTON_ON,BUTTON_LONG_CYCLE_DISABLE );
  	Button_Attach(&Button_1, BUTTON_DOWM, Button_One_Down_CallBack);
  	Button_Create(&Button_2, Read_Key_Level, Button_Pin_2, BUTTON_ON);
- 	Button_Attach(&Button_2, BUTTON_LONG, Button_Two_Long_CallBack);
+ 	Button_Attach(&Button_2, BUTTON_LONG, Button_Two_Long_CallBack,BUTTON_LONG_CYCLE_ENABLE );
  }
  
  int main(void)
