@@ -20,20 +20,20 @@ uint8_t Read_Key_Level(uint32_t Pin )
 
 void Button_One_Down_CallBack(void *btn)
 {
-  //°´¼ü1¶Ì°´º¯Êý
+  //ï¿½ï¿½ï¿½ï¿½1ï¿½Ì°ï¿½ï¿½ï¿½ï¿½ï¿½
 }
 
 void Button_Two_Long_CallBack(void *btn)
 {
-  //°´¼ü2³¤°´º¯Êý
+  //ï¿½ï¿½ï¿½ï¿½2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 } 
  
  void Button_Init(void)
  {
  	Button_Create(&Button_1, Read_Key_Level, Button_Pin_1, BUTTON_ON,BUTTON_LONG_CYCLE_DISABLE );
  	Button_Attach(&Button_1, BUTTON_DOWM, Button_One_Down_CallBack);
- 	Button_Create(&Button_2, Read_Key_Level, Button_Pin_2, BUTTON_ON);
- 	Button_Attach(&Button_2, BUTTON_LONG, Button_Two_Long_CallBack,BUTTON_LONG_CYCLE_ENABLE );
+ 	Button_Create(&Button_2, Read_Key_Level, Button_Pin_2, BUTTON_ON,BUTTON_LONG_CYCLE_ENABLE);
+ 	Button_Attach(&Button_2, BUTTON_LONG, Button_Two_Long_CallBack);
  }
  
  int main(void)
